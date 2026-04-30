@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en" data-t="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSLRswala — Partner Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--royal:#252359;--baby:#90CCFF;--orange:#F3861F;--green:#22C55E;--red:#EF4444;--amber:#F59E0B}
+[data-t="dark"]{--bg:#111827;--bg1:#1F2937;--bg2:#374151;--bg3:#111827;--line:#374151;--line2:rgba(255,255,255,.06);--txt:#F9FAFB;--txt2:#9CA3AF;--txt3:#6B7280;--hover:rgba(255,255,255,.025);--sh:none}
+[data-t="light"]{--bg:#F0F4FF;--bg1:#FFFFFF;--bg2:#F3F4F6;--bg3:#F0F4FF;--line:#E5E7EB;--line2:rgba(0,0,0,.06);--txt:#111827;--txt2:#6B7280;--txt3:#9CA3AF;--hover:rgba(37,35,89,.03);--sh:0 1px 3px rgba(0,0,0,.08)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--royal);border-radius:2px}
+button{cursor:pointer;font-family:inherit}
+a{text-decoration:none;color:inherit}
+/* TOPBAR */
+.topbar{background:var(--royal);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid rgba(144,204,255,.15);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-mark{width:22px;height:22px}
+.logo-txt{display:flex;flex-direction:column;line-height:1.1}
+.logo-a{font-size:12px;font-weight:800;color:#fff;letter-spacing:2px}
+.logo-b{font-size:9px;font-weight:400;color:var(--baby);letter-spacing:3px;font-style:italic}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.live-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 12px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.live-txt{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.icon-btn{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:13px;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.icon-btn:hover{background:rgba(255,255,255,.16)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinning{animation:spin .7s linear infinite}
+/* LOCK */
+.lock{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 52px);padding:24px}
+.lock-box{max-width:380px;width:100%;text-align:center}
+.lock-icon{font-size:36px;margin-bottom:14px}
+.lock-title{font-size:19px;font-weight:800;margin-bottom:6px}
+.lock-sub{font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:22px}
+.lock-input{width:100%;background:var(--bg1);border:1.5px solid var(--line);border-radius:8px;padding:13px 16px;font-size:14px;color:var(--txt);font-family:'DM Mono',monospace;letter-spacing:3px;text-align:center;outline:none;transition:border-color .2s;margin-bottom:10px}
+.lock-input:focus{border-color:var(--baby)}
+[data-t="light"] .lock-input:focus{border-color:var(--royal)}
+.lock-btn{width:100%;background:var(--royal);color:#fff;font-size:13px;font-weight:700;padding:13px;border:none;border-radius:8px;letter-spacing:.5px;transition:opacity .2s}
+.lock-btn:hover{opacity:.88}
+.lock-err{font-size:12px;color:var(--red);margin-top:8px;display:none}
+.lock-help{font-size:12px;color:var(--txt3);margin-top:18px;line-height:1.7}
+.lock-help a{color:var(--baby);border-bottom:1px solid rgba(144,204,255,.3)}
+[data-t="light"] .lock-help a{color:var(--royal)}
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 52px);gap:12px;color:var(--txt2)}
+.loading-spinner{width:28px;height:28px;border:2px solid var(--line);border-top-color:var(--baby);border-radius:50%;animation:spin .8s linear infinite}
+[data-t="light"] .loading-spinner{border-top-color:var(--royal)}
+.loading-txt{font-size:13px}
+/* ERROR */
+.error-box{max-width:440px;margin:60px auto;padding:0 24px;text-align:center}
+.error-icon{font-size:32px;margin-bottom:12px}
+.error-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.error-sub{font-size:12px;color:var(--txt2);line-height:1.7;margin-bottom:18px}
+.retry-btn{background:var(--royal);color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:12px;font-weight:600;letter-spacing:.3px}
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:28px 24px 64px}
+/* TABS */
+.ptabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:24px;overflow-x:auto}
+.ptab{font-size:13px;font-weight:600;color:var(--txt2);padding:0 0 12px;margin-right:24px;background:none;border:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;position:relative;bottom:-1px;white-space:nowrap;flex-shrink:0}
+.ptab:hover{color:var(--txt)}
+.ptab.on{color:var(--baby);border-bottom-color:var(--baby)}
+[data-t="light"] .ptab.on{color:var(--royal);border-bottom-color:var(--royal)}
+/* PAGE HEADER */
+.pg-head{margin-bottom:24px}
+.pg-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px}
+.pg-name{font-size:22px;font-weight:800;margin-bottom:3px;letter-spacing:-.3px}
+.pg-sub{font-size:12px;color:var(--txt2)}
+/* ALERTS */
+.alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:7px;font-size:12px;line-height:1.55;border-left:3px solid}
+.al-warn{background:rgba(243,134,31,.07);border-left-color:var(--orange)}
+.al-info{background:rgba(144,204,255,.07);border-left-color:var(--baby)}
+.al-good{background:rgba(34,197,94,.07);border-left-color:var(--green)}
+[data-t="light"] .al-info{background:rgba(37,35,89,.04);border-left-color:var(--royal)}
+.al-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+/* SUMMARY */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg1);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:24px;box-shadow:var(--sh)}
+.s-cell{padding:18px;border-right:1px solid var(--line);transition:background .15s}
+.s-cell:last-child{border-right:none}
+.s-cell:hover{background:var(--hover)}
+.s-lbl{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.s-val{font-size:20px;font-weight:800;letter-spacing:-.5px;line-height:1;margin-bottom:5px}
+.s-val.blue{color:var(--baby)}.s-val.green{color:var(--green)}.s-val.orange{color:var(--orange)}.s-val.white{color:var(--txt)}
+[data-t="light"] .s-val.blue{color:var(--royal)}
+.s-note{font-size:11px;color:var(--txt3)}
+/* INSIGHTS */
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.ib{background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:16px 18px;box-shadow:var(--sh)}
+.ib-icon{font-size:16px;margin-bottom:7px}
+.ib-val{font-size:19px;font-weight:800;letter-spacing:-.4px;margin-bottom:3px}
+.ib-val.green{color:var(--green)}.ib-val.orange{color:var(--orange)}.ib-val.blue{color:var(--baby)}
+[data-t="light"] .ib-val.blue{color:var(--royal)}
+.ib-lbl{font-size:11px;color:var(--txt2)}
+.ib-note{font-size:10px;color:var(--txt3);margin-top:2px}
+/* SECTION */
+.sec{margin-bottom:24px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sec-ttl{font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1.2px}
+.sec-meta{font-size:11px;color:var(--txt3)}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;background:var(--bg1);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--sh)}
+.tbl thead th{text-align:left;padding:10px 14px;font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--line);background:var(--bg2);white-space:nowrap}
+.tbl thead th.r{text-align:right}
+.tbl tbody tr{border-bottom:1px solid var(--line2);cursor:pointer;transition:background .15s}
+.tbl tbody tr:last-child{border-bottom:none}
+.tbl tbody tr:hover,.tbl tbody tr.expanded{background:var(--hover)}
+.tbl td{padding:0 14px;height:56px;vertical-align:middle}
+.tbl td.r{text-align:right}
+.td-name{font-size:13px;font-weight:600}
+.td-sn{font-family:'DM Mono',monospace;font-size:9px;color:var(--txt3);margin-top:1px}
+.num{font-family:'DM Mono',monospace;font-size:12px;font-weight:500}
+.num.green{color:var(--green)}.num.blue{color:var(--baby)}.num.orange{color:var(--orange)}.num.muted{color:var(--txt3)}.num.red{color:var(--red)}
+[data-t="light"] .num.blue{color:var(--royal)}
+.pill{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.3px;padding:3px 8px;border-radius:100px}
+.pl-ok{background:rgba(34,197,94,.1);color:var(--green)}
+.pl-active{background:rgba(144,204,255,.1);color:var(--baby)}
+.pl-low{background:rgba(239,68,68,.08);color:var(--red)}
+[data-t="light"] .pl-active{background:rgba(37,35,89,.08);color:var(--royal)}
+.bar-w{width:60px;height:4px;background:var(--bg2);border-radius:100px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bar-f{height:100%;border-radius:100px;background:var(--baby);transition:width 1s ease}
+[data-t="light"] .bar-f{background:var(--royal)}
+.bar-f.warm{background:var(--orange)}.bar-f.lo{background:var(--red)}
+.spark{display:flex;align-items:flex-end;gap:2px;height:18px;width:48px}
+.sp{flex:1;border-radius:1px 1px 0 0;background:rgba(144,204,255,.18);min-height:1px}
+.sp.hi{background:rgba(243,134,31,.5)}
+[data-t="light"] .sp{background:rgba(37,35,89,.1)}
+[data-t="light"] .sp.hi{background:rgba(243,134,31,.4)}
+.chev{font-size:10px;color:var(--txt3);transition:transform .2s;display:inline-block}
+.chev.open{transform:rotate(90deg)}
+.hs{display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.hs-num{font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
+.hs-of{font-size:9px;color:var(--txt3)}
+/* EXPANDED */
+.detail-row td{padding:0;height:auto;cursor:default}
+.detail-row:hover{background:transparent !important}
+.detail-panel{padding:0 14px 0 28px;background:var(--bg3);overflow:hidden;max-height:0;transition:max-height .35s ease,padding .35s ease}
+.detail-panel.open{max-height:500px;padding:18px 14px 18px 28px}
+.dp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.dp-s{padding:12px 14px;background:var(--bg1);border:1px solid var(--line);border-radius:8px}
+.dp-l{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.dp-v{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.dp-v.blue{color:var(--baby)}.dp-v.green{color:var(--green)}.dp-v.orange{color:var(--orange)}.dp-v.red{color:var(--red)}
+[data-t="light"] .dp-v.blue{color:var(--royal)}
+.dp-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.trend-l{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.tbars{display:flex;align-items:flex-end;gap:4px;height:44px}
+.tb{flex:1;border-radius:2px 2px 0 0;background:rgba(144,204,255,.12);transition:background .15s;min-height:2px;position:relative;cursor:default}
+.tb:hover{background:rgba(144,204,255,.4)}
+.tb.now{background:rgba(243,134,31,.3);border-bottom:2px solid var(--orange)}
+.tb:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);background:var(--royal);color:#fff;font-size:9px;font-family:'DM Mono',monospace;padding:3px 7px;border-radius:3px;white-space:nowrap;pointer-events:none;z-index:20}
+[data-t="light"] .tb{background:rgba(37,35,89,.07)}
+[data-t="light"] .tb:hover{background:rgba(37,35,89,.2)}
+.tmonths{display:flex;gap:4px;margin-top:3px}
+.tm{flex:1;text-align:center;font-size:8px;color:var(--txt3);font-family:'DM Mono',monospace}
+/* YEARLY */
+.year-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.yc{background:var(--bg1);border:1px solid var(--line);border-radius:8px;padding:14px 16px;box-shadow:var(--sh)}
+.yc-yr{font-family:'DM Mono',monospace;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.yc-rev{font-size:17px;font-weight:800;letter-spacing:-.4px;margin-bottom:2px}
+.yc-share{font-size:12px;color:var(--green)}
+/* PAYMENTS */
+.pay-list{background:var(--bg1);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--sh)}
+.pay-row{display:flex;align-items:center;padding:0 14px;height:46px;border-bottom:1px solid var(--line2);transition:background .15s}
+.pay-row:last-child{border-bottom:none}
+.pay-row:hover{background:var(--hover)}
+.pr-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-right:12px}
+.pr-dot.paid{background:var(--green)}.pr-dot.pending{background:var(--orange)}.pr-dot.future{background:var(--line)}
+.pr-mo{font-size:13px;font-weight:500;flex:1}
+.pr-am{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;margin-left:auto;margin-right:18px}
+.pr-am.paid{color:var(--green)}.pr-am.pending{color:var(--orange)}.pr-am.future{color:var(--txt3)}
+.pr-dt{font-family:'DM Mono',monospace;font-size:10px;color:var(--txt3);min-width:90px;text-align:right}
+/* CASH MODULES */
+.mod-card{background:var(--bg1);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--sh);margin-bottom:12px}
+.mod-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mod-hd.a{border-top:3px solid var(--baby)}.mod-hd.b{border-top:3px solid var(--orange)}
+[data-t="light"] .mod-hd.a{border-top-color:var(--royal)}
+.mhd-n{font-size:13px;font-weight:700}.mhd-r{font-family:'DM Mono',monospace;font-size:11px;color:var(--txt3)}
+.mod-body{display:grid;grid-template-columns:repeat(4,1fr)}
+.mb{padding:14px 18px;border-right:1px solid var(--line)}
+.mb:last-child{border-right:none}
+.mb-l{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.mb-v{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.mb-v.blue{color:var(--baby)}.mb-v.green{color:var(--green)}.mb-v.orange{color:var(--orange)}
+[data-t="light"] .mb-v.blue{color:var(--royal)}
+.mod-pb{padding:10px 18px 12px;border-top:1px solid var(--line2)}
+.mod-pb-hd{display:flex;justify-content:space-between;margin-bottom:4px}
+.mod-pb-l{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
+.mod-pb-v{font-family:'DM Mono',monospace;font-size:10px;color:var(--baby)}
+[data-t="light"] .mod-pb-v{color:var(--royal)}
+.mod-pb-tr{height:4px;background:var(--bg2);border-radius:100px;overflow:hidden}
+.mod-pb-fi{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--royal),var(--baby))}
+.mod-note{padding:9px 18px 12px;border-top:1px solid var(--line2);font-size:11px;color:var(--txt3);line-height:1.6}
+/* DEMO */
+.demo-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(243,134,31,.1);border:1px solid rgba(243,134,31,.25);border-radius:4px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--orange);letter-spacing:.5px;margin-bottom:16px}
+/* FOOTER */
+.pg-foot{padding-top:24px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:8px}
+.foot-note{font-size:10px;color:var(--txt3);font-family:'DM Mono',monospace;letter-spacing:.3px}
+.foot-wa{font-size:11px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:5px}
+.foot-wa:hover{text-decoration:underline}
+/* RESPONSIVE */
+@media(max-width:720px){
+  .summary{grid-template-columns:1fr 1fr}
+  .s-cell:nth-child(2){border-right:none}
+  .s-cell:nth-child(1),.s-cell:nth-child(2){border-bottom:1px solid var(--line)}
+  .dp-grid{grid-template-columns:1fr 1fr}
+  .mod-body{grid-template-columns:1fr 1fr}
+  .mb:nth-child(2){border-right:none}
+  .mb:nth-child(1),.mb:nth-child(2){border-bottom:1px solid var(--line)}
+  .insights{grid-template-columns:1fr}
+  .main{padding:20px 16px 48px}
+  .topbar{padding:0 16px}
+}
+@media(max-width:480px){
+  .summary{grid-template-columns:1fr}
+  .s-cell{border-right:none !important;border-bottom:1px solid var(--line)}
+  .s-cell:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <svg class="logo-mark" viewBox="0 0 26 26" fill="none">
+      <rect x="2" y="6" width="22" height="14" rx="2.5" fill="#90CCFF" opacity=".85"/>
+      <circle cx="11" cy="13" r="5" fill="#252359"/>
+      <circle cx="11" cy="13" r="3.2" fill="#1a1740"/>
+      <circle cx="11" cy="13" r="1.5" fill="#90CCFF" opacity=".4"/>
+      <rect x="16" y="4" width="4" height="4" rx="1" fill="#90CCFF" opacity=".7"/>
+      <rect x="21" y="6" width="2.5" height="5" rx="1" fill="#F3861F"/>
+      <line x1="8.5" y1="20" x2="6" y2="26" stroke="#90CCFF" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14.5" y1="20" x2="17" y2="26" stroke="#90CCFF" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="11.5" y1="20" x2="11.5" y2="25" stroke="#90CCFF" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="7" y1="25" x2="16" y2="25" stroke="#90CCFF" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-txt"><span class="logo-a">DSLRS</span><span class="logo-b">wala</span></div>
+  </div>
+  <div class="topbar-r">
+    <div class="live-chip"><span class="live-dot"></span><span class="live-txt" id="sync-txt">SYNCING</span></div>
+    <button class="icon-btn" id="refresh-btn" onclick="handleRefresh()" title="Refresh">&#8635;</button>
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()">&#9728;</button>
+  </div>
+</header>
+
+<div id="lock-screen" class="lock" style="display:none">
+  <div class="lock-box">
+    <div class="lock-icon">&#128272;</div>
+    <h2 class="lock-title">Partner Portal</h2>
+    <p class="lock-sub">Enter your access PIN to view your investment dashboard. Contact Aamir if you need help.</p>
+    <input class="lock-input" type="password" id="pin-input" placeholder="&bull; &bull; &bull; &bull;" maxlength="6" autocomplete="off"
+           onkeydown="if(event.key==='Enter')tryPin()" oninput="document.getElementById('pin-err').style.display='none'">
+    <button class="lock-btn" onclick="tryPin()">Access Dashboard</button>
+    <p class="lock-err" id="pin-err">Incorrect PIN. Contact Aamir: +91 79902 66857</p>
+    <p class="lock-help">No PIN? <a href="https://wa.me/917990266857" target="_blank">WhatsApp Aamir</a></p>
+  </div>
+</div>
+
+<div id="loading-screen" class="loading" style="display:none">
+  <div class="loading-spinner"></div>
+  <p class="loading-txt">Loading your dashboard&hellip;</p>
+</div>
+
+<div id="error-screen" style="display:none">
+  <div class="error-box">
+    <div class="error-icon">&#9888;&#65039;</div>
+    <h3 class="error-title">Data temporarily unavailable</h3>
+    <p class="error-sub" id="error-msg">Could not fetch dashboard data. Check your connection and try again.</p>
+    <button class="retry-btn" onclick="handleRefresh()">&#8635; Retry</button>
+  </div>
+</div>
+
+<main class="main" id="main-screen" style="display:none">
+  <nav class="ptabs" id="admin-tabs" style="display:none">
+    <button class="ptab on" onclick="switchPartner('vinay')">Vinay Chandnani</button>
+    <button class="ptab"    onclick="switchPartner('anish')">Anish Kumar</button>
+    <button class="ptab"    onclick="switchPartner('atik')">Atik Shaikh</button>
+    <button class="ptab"    onclick="switchPartner('bob_demo')">Bob / PFC (Demo)</button>
+  </nav>
+  <div class="pg-head">
+    <p class="pg-lbl" id="pg-lbl">Partner</p>
+    <h1 class="pg-name" id="pg-name">&mdash;</h1>
+    <p class="pg-sub" id="pg-sub">&mdash;</p>
+  </div>
+  <div id="demo-badge-wrap"></div>
+  <div class="alerts" id="alerts"></div>
+  <div class="summary" id="summary"></div>
+  <div class="insights" id="insights"></div>
+  <div id="body"></div>
+  <footer class="pg-foot">
+    <div style="display:flex;align-items:center;gap:7px">
+      <svg width="16" height="16" viewBox="0 0 26 26" fill="none"><rect x="2" y="6" width="22" height="14" rx="2.5" fill="#90CCFF" opacity=".6"/><circle cx="11" cy="13" r="5" fill="#252359"/><rect x="21" y="6" width="2.5" height="5" rx="1" fill="#F3861F"/></svg>
+      <div class="logo-txt" style="line-height:1.1"><span class="logo-a" style="font-size:11px">DSLRS</span><span class="logo-b" style="font-size:8px">wala</span></div>
+    </div>
+    <span class="foot-note">DATA: BOOQABLE RMS &middot; VADODARA, GUJARAT</span>
+    <a class="foot-wa" href="https://wa.me/917990266857" target="_blank">&#9679; WhatsApp Aamir</a>
+  </footer>
+</main>
+
+<script>
+'use strict';
+/* ━━ CONFIGURATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   To update Sheet URLs after re-publishing the v2 backend:
+   Replace only the URL strings below — nothing else needs to change.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const SHEET_URLS = {
+  vinay:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYY6bzWHkzQGLkXl2vLOSEzjskQs-wXRiDGOy--eH9gPxUrrDV5M7jrVjJd42Fbg/pub?gid=3138246&single=true&output=csv',
+  anish:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYY6bzWHkzQGLkXl2vLOSEzjskQs-wXRiDGOy--eH9gPxUrrDV5M7jrVjJd42Fbg/pub?gid=484752545&single=true&output=csv',
+  atik:     'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYY6bzWHkzQGLkXl2vLOSEzjskQs-wXRiDGOy--eH9gPxUrrDV5M7jrVjJd42Fbg/pub?gid=1729704156&single=true&output=csv',
+  bob_demo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYY6bzWHkzQGLkXl2vLOSEzjskQs-wXRiDGOy--eH9gPxUrrDV5M7jrVjJd42Fbg/pub?gid=1680850610&single=true&output=csv',
+};
+/* When you upload DSLRswala_Partner_Backend_v2.xlsx to Google Sheets
+   and publish the new tabs, get the 4 new published CSV URLs and
+   replace the 4 strings above. That is the only change needed. */
+
+const TOKEN_MAP = {
+  'vch_VHN7jd7FEkhnVYni-3NJ4w': 'vinay',
+  'ank_b2XS0JzIANGUs3fvOLZ6sQ': 'anish',
+  'atk_3AuBGbX-DyiLppgKQqvarg': 'atik',
+  'dsl_7F6hnE3BtRbyQv8bhYI8Rg': 'admin',
+  'bob_demo_preview_2026':       'bob_demo',
+};
+const PIN_MAP = { '2647':'vinay','8391':'anish','5028':'atik','0000':'admin','9999':'bob_demo' };
+const CACHE = {}, CACHE_TTL = 5*60*1000;
+let currentPartner = null, isAdmin = false, openRow = null;
+
+/* ━━ CSV PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Reads the v2 Sheet structure built by build_sheet_v2.py:
+   Rows 1-2: skip (header/notes)
+   Rows 3+: key=A, value=B (until marker found)
+   Markers: PRODUCTS_START, YEARLY_START, PAYMENTS_START, MODULES_START
+   After each marker: one header row, then data rows
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function csvToRows(raw) {
+  const rows = [];
+  for (const line of raw.split('\n')) {
+    if (!line.trim()) continue;
+    const cells = []; let cur = '', q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { if (q && line[i+1]==='"'){cur+='"';i++;}else q=!q; }
+      else if (c === ',' && !q) { cells.push(cur.trim()); cur=''; }
+      else cur += c;
+    }
+    cells.push(cur.trim());
+    rows.push(cells);
+  }
+  return rows;
+}
+
+function n(v) {
+  if (v===''||v==null) return 0;
+  const s = String(v).replace(/[^0-9.\-]/g,'');
+  return isNaN(parseFloat(s)) ? 0 : parseFloat(s);
+}
+function fmt(v) {
+  const x = n(v);
+  if (x===0) return '\u20b90';
+  if (x>=100000) return '\u20b9'+(x/100000).toFixed(2)+'L';
+  return '\u20b9'+Math.round(x).toLocaleString('en-IN');
+}
+
+function parseSheet(rows, id) {
+  const kv = {};
+  let i=2, mode='kv';
+  const products=[], payments=[], modules=[], yearly=[];
+  let pH=[], pyH=[], paH=[], mH=[];
+
+  while (i<rows.length) {
+    const row=rows[i]; const a=(row[0]||'').trim();
+    if      (a==='PRODUCTS_START'){mode='ph'; i++; continue;}
+    else if (a==='YEARLY_START')  {mode='yh'; i++; continue;}
+    else if (a==='PAYMENTS_START'){mode='pah';i++; continue;}
+    else if (a==='MODULES_START') {mode='mh'; i++; continue;}
+
+    if      (mode==='kv')  { if(a&&row[1]!==undefined) kv[a]=(row[1]||'').trim(); }
+    else if (mode==='ph')  { pH=row.map(h=>(h||'').trim());  mode='pd'; }
+    else if (mode==='yh')  { pyH=row.map(h=>(h||'').trim()); mode='yd'; }
+    else if (mode==='pah') { paH=row.map(h=>(h||'').trim()); mode='pad'; }
+    else if (mode==='mh')  { mH=row.map(h=>(h||'').trim());  mode='md'; }
+    else if (mode==='pd')  { if(a&&pH.length){const p={};pH.forEach((h,j)=>p[h]=(row[j]||'').trim());if(p.product_name)products.push(p);} }
+    else if (mode==='yd')  { if(a&&pyH.length){const y={};pyH.forEach((h,j)=>y[h]=(row[j]||'').trim());if(y.year)yearly.push(y);} }
+    else if (mode==='pad') { if(a&&paH.length){const p={};paH.forEach((h,j)=>p[h]=(row[j]||'').trim());if(p.month_year||p.amount)payments.push(p);} }
+    else if (mode==='md')  { if(a&&mH.length){const m={};mH.forEach((h,j)=>m[h]=(row[j]||'').trim());if(m.module_name)modules.push(m);} }
+    i++;
+  }
+
+  const type=(kv.partner_type||'equipment').toLowerCase();
+  const sp=n(kv.split_pct)||50;
+
+  // Alerts
+  const alerts=[];
+  if(type==='equipment'){
+    const low=products.filter(p=>['low','warn'].includes((p.status||'').toLowerCase()));
+    if(low.length) alerts.push({t:'warn',i:'\u26a0',m:`<strong>${low.map(p=>p.product_name.split(' ').slice(0,3).join(' ')).join(', ')}</strong> below target utilisation.`});
+    const pend=payments.find(p=>(p.status||'').toLowerCase()==='pending');
+    if(pend) alerts.push({t:'info',i:'\ud83d\udcc5',m:`<strong>${pend.month_year} payout of ${fmt(pend.amount)}</strong> pending. Expected by ${pend.payment_date||'mid-month'}.`});
+  } else {
+    if(n(kv.payments_made)>0) alerts.push({t:'good',i:'\u2713',m:`<strong>${kv.payments_made} payments made, zero missed.</strong> Full history below.`});
+    const pend=payments.find(p=>(p.status||'').toLowerCase()==='pending');
+    if(pend) alerts.push({t:'info',i:'\ud83d\udcc5',m:`<strong>Next: ${fmt(pend.amount)}</strong> due ${pend.payment_date||pend.month_year}${pend.module?' (Mod '+pend.module+')':''}.`});
+  }
+  if(id==='bob_demo') alerts.unshift({t:'info',i:'\ud83c\udfac',m:'<strong>Demo Preview.</strong> Numbers are illustrative. Live data shows once agreement is signed and inventory deployed.'});
+
+  // Summary
+  let summary=[];
+  if(type==='equipment'){
+    summary=[
+      {l:'Total Investment',v:fmt(kv.total_investment),c:'white',note:'Equipment cost'},
+      {l:'Gross Revenue',   v:fmt(kv.total_gross),     c:'blue', note:kv.months_active+' months active'},
+      {l:'Your Earnings',   v:fmt(kv.total_your_share),c:'green',note:sp+'% share · net of GST'},
+      {l:'Annualised ROI',  v:n(kv.annualised_roi_pct).toFixed(1)+'%',c:'blue',note:'Based on current pace'},
+    ];
+  } else {
+    summary=[
+      {l:'Total Deployed', v:fmt(kv.total_deployed),        c:'white', note:'Principal'},
+      {l:'Total Received', v:fmt(kv.total_paid),            c:'green', note:'All payments'},
+      {l:'Annual Return',  v:fmt(kv.annual_return),         c:'blue',  note:'Fixed rate'},
+      {l:'Next Payment',   v:fmt(kv.next_payment_amount),   c:'orange',note:kv.next_payment_date||'Upcoming'},
+    ];
+  }
+
+  // Insights
+  let ins=[];
+  if(type==='equipment'){
+    let bestRev=0,bestLbl='';
+    for(const p of products) for(let mi=1;mi<=8;mi++){const r=n(p['m'+mi+'_rev'])*sp/100;if(r>bestRev){bestRev=r;bestLbl=p['m'+mi+'_label']||'';}}
+    const pend=payments.filter(p=>p.status==='pending').reduce((s,p)=>s+n(p.amount),0);
+    ins=[
+      {icon:'\ud83c\udfc6',val:fmt(bestRev),       c:'green', lbl:'Best Month (Your Share)',note:bestLbl||'—'},
+      {icon:'\ud83d\udce6',val:products.length,    c:'blue',  lbl:'Items Deployed',       note:'Active in DSLRswala fleet'},
+      {icon:'\u26a1',      val:fmt(pend||n(kv.avg_monthly_share)),c:'orange',lbl:pend?'Pending Payout':'Avg Monthly Share',note:pend?'Awaiting disbursement':'Rolling average'},
+    ];
+  } else {
+    ins=[
+      {icon:'\u2705',val:kv.payments_made,                     c:'green', lbl:'Payments Made',    note:'Zero missed on record'},
+      {icon:'\ud83d\udcb0',val:(n(kv.capital_returned_pct)*100).toFixed(1)+'%',c:'green',lbl:'Capital Returned',note:fmt(kv.total_paid)+' of '+fmt(kv.total_deployed)},
+      {icon:'\ud83d\udcc5',val:fmt(kv.next_payment_amount),     c:'orange',lbl:'Due Next',         note:kv.next_payment_date||'—'},
+    ];
+  }
+
+  return { id, type, name:kv.partner_name||id,
+    lbl: type==='cash'?'Cash Investor':(id==='bob_demo'?'Equipment Partner (Demo)':'Equipment Partner'),
+    sub:`${kv.agreement||'—'} \u00b7 Active since ${kv.since||'—'}`,
+    isDemo:id==='bob_demo', lastUpdated:kv.last_updated||'—',
+    splitPct:sp, kv, summary, ins, alerts, products, payments, modules, yearly };
+}
+
+/* ━━ FETCH ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+async function fetchPartner(id, force=false) {
+  const now=Date.now(), cached=CACHE[id];
+  if(cached&&!force&&(now-cached.ts)<CACHE_TTL) return cached.data;
+  const url=SHEET_URLS[id];
+  if(!url) throw new Error('No URL for: '+id);
+  const res=await fetch(url+'&cb='+now);
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const data=parseSheet(csvToRows(await res.text()),id);
+  CACHE[id]={data,ts:now};
+  return data;
+}
+
+/* ━━ RENDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function renderSummary(d){
+  document.getElementById('summary').innerHTML=d.summary.map(s=>`
+    <div class="s-cell"><div class="s-lbl">${s.l}</div>
+    <div class="s-val ${s.c}">${s.v}</div>
+    <div class="s-note">${s.note}</div></div>`).join('');
+}
+function renderInsights(d){
+  document.getElementById('insights').innerHTML=d.ins.map(i=>`
+    <div class="ib"><div class="ib-icon">${i.icon}</div>
+    <div class="ib-val ${i.c}">${i.val}</div>
+    <div class="ib-lbl">${i.lbl}</div>
+    <div class="ib-note">${i.note}</div></div>`).join('');
+}
+function renderAlerts(d){
+  document.getElementById('alerts').innerHTML=d.alerts.map(a=>`
+    <div class="alert al-${a.t}"><span class="al-icon">${a.i}</span><span>${a.m}</span></div>`).join('');
+}
+
+function renderPayments(pays){
+  if(!pays.length) return '<p style="color:var(--txt3);font-size:13px;padding:16px">No payment records.</p>';
+  return '<div class="pay-list">'+pays.filter(p=>p.month_year).map(p=>{
+    const st=(p.status||'future').toLowerCase();
+    return `<div class="pay-row"><span class="pr-dot ${st}"></span>
+      <span class="pr-mo">${p.month_year}${p.module?' \u2014 Mod '+p.module:''}</span>
+      <span class="pr-am ${st}">${p.amount?fmt(p.amount):'—'}</span>
+      <span class="pr-dt">${p.payment_date||''}</span></div>`;
+  }).join('')+'</div>';
+}
+
+function renderYearly(d){
+  if(!d.yearly||!d.yearly.length) return '';
+  const cells=d.yearly.map(y=>`
+    <div class="yc"><div class="yc-yr">${y.year}</div>
+    <div class="yc-rev">${fmt(y.total_gross_all_items)}</div>
+    <div class="yc-share">Your share: ${fmt(y.your_share_year)}</div></div>`).join('');
+  const tg=d.yearly.reduce((s,y)=>s+n(y.total_gross_all_items),0);
+  const ts=d.yearly.reduce((s,y)=>s+n(y.your_share_year),0);
+  return `<div class="sec"><div class="sec-hd"><span class="sec-ttl">Year-by-Year</span></div>
+    <div class="year-grid">${cells}
+    <div class="yc" style="border-color:var(--baby)">
+      <div class="yc-yr" style="color:var(--baby)">All Time</div>
+      <div class="yc-rev">${fmt(tg)}</div>
+      <div class="yc-share" style="color:var(--baby)">Your total: ${fmt(ts)}</div>
+    </div></div></div>`;
+}
+
+function renderProducts(d){
+  const {products:prods,splitPct:sp}=d;
+  if(!prods.length){
+    document.getElementById('body').innerHTML='<p style="color:var(--txt3);font-size:13px;text-align:center;padding:32px">No product data. Ensure the v2 Sheet is published and partner tags are set in Booqable.</p>';
+    return;
+  }
+  const rows=prods.map((p,idx)=>{
+    const rcvFrac=n(p.recovery_pct), rcv=(rcvFrac*100).toFixed(0);
+    const st=(p.status||'active').toLowerCase();
+    const pillC=st==='ok'?'pl-ok':st==='active'?'pl-active':'pl-low';
+    const pillT=st==='ok'?'Good':st==='active'?'Active':'Low';
+    const barC=rcvFrac>=0.4?'':rcvFrac>=0.2?'warm':'lo';
+    const mom=n(p.mom_change_pct);
+    const momHtml=mom!==0?`<div style="font-size:9px;font-family:'DM Mono',monospace;color:${mom>0?'var(--green)':'var(--red)'};margin-top:1px">${mom>0?'+':''}${mom.toFixed(1)}% MoM</div>`:'';
+    const bars=[1,2,3,4,5,6,7,8].map(mi=>n(p['m'+mi+'_rev'])*sp/100);
+    const mb=Math.max(...bars,1);
+    const sparkHtml=bars.map((v,i)=>`<div class="sp ${i===7?'hi':''}" style="height:${Math.round(v/mb*100)}%"></div>`).join('');
+    const hs=Math.min(100,Math.round((Math.min(rcvFrac/0.5,1)*50)+(Math.min(n(p.util_pct)/0.25,1)*50)));
+    const hsc=hs>=60?'var(--green)':hs>=35?'var(--orange)':'var(--red)';
+    return `<tr id="tr-${idx}" onclick="toggleP(${idx})">
+      <td><span class="pill ${pillC}">${pillT}</span></td>
+      <td><div class="td-name">${p.product_name}</div><div class="td-sn">${p.identifier}</div></td>
+      <td class="r"><span class="num">${Math.round(n(p.charge_days_total))}</span></td>
+      <td class="r"><span class="num ${rcvFrac>=0.4?'green':rcvFrac>=0.2?'orange':'red'}">${rcv}%</span></td>
+      <td class="r"><div><span class="num green">${fmt(p.your_share)}</span></div>${momHtml}</td>
+      <td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px">
+        <div class="bar-w"><div class="bar-f ${barC}" style="width:${Math.min(+rcv,100)}%"></div></div>
+        <span class="num muted" style="min-width:28px;font-size:10px">${rcv}%</span></div></td>
+      <td class="r"><div class="hs"><span class="hs-num" style="color:${hsc}">${hs}</span><span class="hs-of">/100</span></div></td>
+      <td class="r"><div class="spark" style="justify-content:flex-end">${sparkHtml}</div></td>
+      <td><span class="chev" id="chev-${idx}">&#8250;</span></td></tr>
+      <tr class="detail-row"><td colspan="9"><div class="detail-panel" id="dp-${idx}"></div></td></tr>`;
+  }).join('');
+  document.getElementById('body').innerHTML=`
+    <div class="sec"><div class="sec-hd">
+      <span class="sec-ttl">Equipment &mdash; ${prods.length} item${prods.length!==1?'s':''}</span>
+      <span class="sec-meta">Tap any row for detail</span></div>
+    <table class="tbl"><thead><tr>
+      <th style="width:70px">Status</th><th>Item</th>
+      <th class="r">Charge Days</th><th class="r">Recovery</th>
+      <th class="r">Your Share</th><th class="r">Progress</th>
+      <th class="r">Health</th><th class="r">Trend</th>
+      <th style="width:22px"></th></tr></thead>
+    <tbody>${rows}</tbody></table></div>
+    ${renderYearly(d)}
+    <div class="sec"><div class="sec-hd"><span class="sec-ttl">Payments</span></div>${renderPayments(d.payments)}</div>`;
+}
+
+function toggleP(idx){
+  const panel=document.getElementById('dp-'+idx);
+  const chev=document.getElementById('chev-'+idx);
+  const tr=document.getElementById('tr-'+idx);
+  const isOpen=panel.classList.contains('open');
+  if(openRow!==null&&openRow!==idx){
+    ['dp-'+openRow,'chev-'+openRow,'tr-'+openRow].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.remove('open');el.classList.remove('expanded');}});
+    openRow=null;
+  }
+  if(isOpen){panel.classList.remove('open');chev.classList.remove('open');tr.classList.remove('expanded');openRow=null;return;}
+  const d=CACHE[currentPartner]?.data;
+  if(!d) return;
+  const p=d.products[idx];
+  const sp=d.splitPct;
+  const rcv=n(p.recovery_pct)*100;
+  const roi=n(p.annualised_roi_pct);
+  const eta=n(p.eta_months);
+  const mo=n(p.months_active);
+  const bars=[1,2,3,4,5,6,7,8].map(mi=>({rev:n(p['m'+mi+'_rev'])*sp/100,lbl:(p['m'+mi+'_label']||'')}));
+  const mb=Math.max(...bars.map(b=>b.rev),1);
+  const best=bars.reduce((a,b)=>b.rev>a.rev?b:a,bars[0]);
+  const tbH=bars.map((b,i)=>`<div class="tb ${i===7?'now':''}" style="height:${Math.round(b.rev/mb*100)}%" data-tip="${b.lbl}: ${fmt(b.rev)}"></div>`).join('');
+  const tmH=bars.map(b=>`<div class="tm">${(b.lbl||'').split('-')[0]}</div>`).join('');
+  panel.innerHTML=`
+    <div class="dp-grid">
+      <div class="dp-s"><div class="dp-l">Purchase Cost</div><div class="dp-v">${fmt(p.cost)}</div></div>
+      <div class="dp-s"><div class="dp-l">Annualised ROI</div><div class="dp-v green">${roi.toFixed(1)}%</div></div>
+      <div class="dp-s"><div class="dp-l">Payback ETA</div><div class="dp-v orange">${eta>=999?'Calculating\u2026':'~'+eta+' months'}</div></div>
+      <div class="dp-s"><div class="dp-l">Months Active</div><div class="dp-v blue">${mo}</div></div>
+      <div class="dp-s"><div class="dp-l">Best Month</div><div class="dp-v">${fmt(best.rev)}</div><div class="dp-sub">${best.lbl}</div></div>
+      <div class="dp-s"><div class="dp-l">Recovery</div><div class="dp-v ${rcv>=40?'green':rcv>=20?'orange':'red'}">${rcv.toFixed(1)}%</div></div>
+    </div>
+    <div class="trend-l">Monthly Revenue Share &mdash; Last 8 Months</div>
+    <div class="tbars">${tbH}</div>
+    <div class="tmonths">${tmH}</div>`;
+  panel.classList.add('open');chev.classList.add('open');tr.classList.add('expanded');openRow=idx;
+}
+
+function renderCash(d){
+  const modHtml=d.modules.map(m=>{
+    const pc=n(m.principal)>0?Math.round(n(m.total_paid_module)/n(m.principal)*100):0;
+    const tag=(m.tag||'a').toLowerCase();
+    return `<div class="mod-card">
+      <div class="mod-hd ${tag}"><span class="mhd-n">${m.module_name}</span><span class="mhd-r">${m.rate}</span></div>
+      <div class="mod-body">
+        <div class="mb"><div class="mb-l">Principal</div><div class="mb-v">${fmt(m.principal)}</div></div>
+        <div class="mb"><div class="mb-l">Annual Return</div><div class="mb-v orange">${fmt(m.annual_return)}</div></div>
+        <div class="mb"><div class="mb-l">Per ${m.frequency==='monthly'?'Month':'Quarter'}</div><div class="mb-v blue">${fmt(m.payment_amount)}</div></div>
+        <div class="mb"><div class="mb-l">Total Received</div><div class="mb-v green">${fmt(m.total_paid_module)}</div></div>
+      </div>
+      <div class="mod-pb">
+        <div class="mod-pb-hd"><span class="mod-pb-l">Capital Returned</span>
+        <span class="mod-pb-v">${pc}% &middot; ${fmt(m.total_paid_module)} of ${fmt(m.principal)}</span></div>
+        <div class="mod-pb-tr"><div class="mod-pb-fi" style="width:${pc}%"></div></div>
+      </div>
+      <div class="mod-note">${m.note||''}</div></div>`;
+  }).join('');
+  document.getElementById('body').innerHTML=`
+    <div class="sec"><div class="sec-hd"><span class="sec-ttl">Investment Modules</span></div>${modHtml}</div>
+    <div class="sec"><div class="sec-hd"><span class="sec-ttl">Payment History</span></div>${renderPayments(d.payments)}</div>`;
+}
+
+async function renderDashboard(id,force=false){
+  openRow=null;
+  showScreen('loading');
+  try{
+    const d=await fetchPartner(id,force);
+    currentPartner=id;
+    document.getElementById('pg-lbl').textContent=d.lbl;
+    document.getElementById('pg-name').textContent=d.name;
+    document.getElementById('pg-sub').textContent=d.sub;
+    document.getElementById('sync-txt').textContent='LIVE \u00b7 '+d.lastUpdated;
+    document.getElementById('demo-badge-wrap').innerHTML=d.isDemo
+      ?'<div class="demo-badge">\ud83c\udfac DEMO PREVIEW \u2014 Not Live Data</div>':'';
+    renderAlerts(d);renderSummary(d);renderInsights(d);
+    if(d.type==='cash') renderCash(d); else renderProducts(d);
+    showScreen('main');
+  }catch(err){
+    console.error(err);
+    document.getElementById('error-msg').textContent=err.message||'Failed to load.';
+    showScreen('error');
+  }
+}
+
+/* ━━ AUTH ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function showScreen(w){
+  ['lock-screen','loading-screen','error-screen','main-screen'].forEach(id=>{
+    const el=document.getElementById(id); if(el)el.style.display='none';
+  });
+  const m=w==='main'?'main-screen':w==='loading'?'loading-screen':w==='error'?'error-screen':'lock-screen';
+  const el=document.getElementById(m); if(el)el.style.display='';
+}
+function activatePartner(pid){
+  isAdmin=pid==='admin';
+  document.getElementById('admin-tabs').style.display=isAdmin?'flex':'none';
+  renderDashboard(isAdmin?'vinay':pid);
+}
+function tryPin(){
+  const pin=document.getElementById('pin-input').value.trim();
+  const p=PIN_MAP[pin];
+  if(p){document.getElementById('pin-err').style.display='none';activatePartner(p);}
+  else{document.getElementById('pin-err').style.display='block';document.getElementById('pin-input').value='';document.getElementById('pin-input').focus();}
+}
+function switchPartner(pid){
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
+  const btn=document.querySelector('[onclick="switchPartner(\''+pid+'\')"]');
+  if(btn) btn.classList.add('on');
+  openRow=null; renderDashboard(pid);
+}
+async function handleRefresh(){
+  const btn=document.getElementById('refresh-btn');
+  btn.classList.add('spinning');btn.disabled=true;
+  if(currentPartner) await renderDashboard(currentPartner,true);
+  btn.classList.remove('spinning');btn.disabled=false;
+}
+
+/* ━━ THEME ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function toggleTheme(){
+  const t=document.documentElement.getAttribute('data-t')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-t',t);
+  document.getElementById('theme-btn').innerHTML=t==='dark'?'&#9728;':'&#127769;';
+  localStorage.setItem('dslrs-theme',t);
+}
+(function(){
+  const s=localStorage.getItem('dslrs-theme');
+  if(s){document.documentElement.setAttribute('data-t',s);
+    const btn=document.getElementById('theme-btn');
+    if(btn) btn.innerHTML=s==='dark'?'&#9728;':'&#127769;';}
+})();
+
+/* ━━ INIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+(function(){
+  const t=new URLSearchParams(window.location.search).get('t');
+  if(t&&TOKEN_MAP[t]) activatePartner(TOKEN_MAP[t]);
+  else showScreen('lock');
+})();
+</script>
+</body>
+</html>

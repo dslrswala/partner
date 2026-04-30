@@ -293,7 +293,7 @@ a{text-decoration:none;color:inherit}
   <div id="vinay-sub-tabs" style="display:none">
     <div class="sub-tabs">
       <button class="sub-tab on" id="vsub-equip" onclick="switchVinayView('equipment')">&#128247; Equipment Portfolio</button>
-      <button class="sub-tab"    id="vsub-cash"  onclick="switchVinayView('cash')">&#128176; Cash Investment</button>
+      <button class="sub-tab"    id="vsub-cash"  onclick="switchVinayView('cash')">&#128176; Capital Investment</button>
     </div>
   </div>
   <div class="alerts" id="alerts"></div>
@@ -453,7 +453,7 @@ function parseSheet(rows, id) {
   }
 
   return { id, type, name:kv.partner_name||id,
-    lbl: type==='cash'?'Cash Investor':(id==='bob_demo'?'Equipment Partner (Demo)':'Equipment Partner'),
+    lbl: type==='cash'?'Capital Investor':(id==='bob_demo'?'Equipment Partner (Demo)':'Equipment Partner'),
     sub:`${kv.agreement||'—'} \u00b7 Active since ${kv.since||'—'}`,
     isDemo:id==='bob_demo', lastUpdated:kv.last_updated||'—',
     splitPct:sp, kv, summary, ins, alerts, products, payments, modules, yearly };
@@ -855,7 +855,7 @@ function demoVinay() {
 function demoVinayCash(){
   return {
     id:'vinay_cash',type:'cash',name:'Vinay Chandnani',isDemo:true,
-    lbl:'Cash Investment',sub:'Monthly 1.5% on Rs 12.5L - Active since January 2022',
+    lbl:'Capital Investment',sub:'Monthly 1.5% on Rs 12.5L - Active since January 2022',
     lastUpdated:'Demo Data',splitPct:0,products:[],yearly:[],
     payments:[
       {month_year:'Nov-2025',amount:'27450',status:'paid',payment_date:'7 Nov 2025',module:'Monthly',notes:'Fixed 1.5% on Rs 12.5L'},
@@ -866,7 +866,7 @@ function demoVinayCash(){
       {month_year:'Apr-2026',amount:'18750',status:'pending',payment_date:'Due Apr 15',module:'Monthly',notes:''},
       {month_year:'May-2026',amount:'18750',status:'future',payment_date:'Due May 15',module:'Monthly',notes:''},
     ],
-    modules:[{module_name:'Monthly Cash Investment',tag:'Monthly',principal:'1250000',rate:'1.5%/month',payment_amount:'18750',frequency:'monthly',annual_return:'225000',total_paid_module:'513698',recovery_pct:'0.411',note:'Rs 12.5L at 1.5%/month = Rs 18,750. Started Jan 2022.'}],
+    modules:[{module_name:'Monthly Capital Investment',tag:'Monthly',principal:'1250000',rate:'1.5%/month',payment_amount:'18750',frequency:'monthly',annual_return:'225000',total_paid_module:'513698',recovery_pct:'0.411',note:'Rs 12.5L at 1.5%/month = Rs 18,750. Started Jan 2022.'}],
     summary:[
       {l:'Total Deployed', v:'₹12.5L',   c:'white', note:'Principal'},
       {l:'Total Received', v:'₹5.14L',   c:'green', note:'Jan 2022 to Mar 2026'},
@@ -920,7 +920,7 @@ function demoAnish() {
 
 function demoAtik() {
   return { id:'atik',type:'cash',name:'Atik Shaikh',isDemo:true,
-    lbl:'Cash Investor',sub:'Module A (1.5%/month) + Module B (4.5%/quarter) · Active since April 2023',
+    lbl:'Capital Investor',sub:'Module A (1.5%/month) + Module B (4.5%/quarter) · Active since April 2023',
     lastUpdated:'Demo Data',splitPct:0,products:[],yearly:[],
     payments:[
       {month_year:'Nov-2025',amount:'27450',status:'paid',payment_date:'7 Nov 2025',module:'A',notes:'Module B invested this month'},

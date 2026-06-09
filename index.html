@@ -1892,16 +1892,9 @@ function exportCSV(type, d){
 }
 
 // ── CONFIG ───────────────────────────────────────────────────
-const CAP_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJ11EuyVNahXSi7uswoCarNpHdfPp-mvmpXgFTPnAF1FWvSxhYbJGDFMrUMDj0ZHU91MV7Dg1iqxDP/pub?single=true&output=csv';
-const EQ_BASE  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQu5_8vuKIVQu6mLJlaEAsEpybmlMg1sFV1o4WS3spzPNm3tkUAg-cmqu2Cfo0wjt0jf8Szi-yAbuMV/pub?single=true&output=csv';
-const SHEET_URLS = {
-  atik:CAP_BASE+'&gid=661262127', vinay_cash:CAP_BASE+'&gid=127939768',
-  javed:CAP_BASE+'&gid=1992129945', demo_capital:CAP_BASE+'&gid=214827053',
-  vinay:EQ_BASE+'&gid=2048227316', anish:EQ_BASE+'&gid=879178585',
-  dhruv:EQ_BASE+'&gid=453306921', jaykumar:EQ_BASE+'&gid=185813436',
-  haresh:EQ_BASE+'&gid=645138110', bhavesh:EQ_BASE+'&gid=1539915485',
-  bob:EQ_BASE+'&gid=1451999927', demo_equip:EQ_BASE+'&gid=531187189',
-};
+const PIN_GATEKEEPER_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+let SESSION_TOKEN = null; // set after successful PIN auth
+  
 const CACHE={},TTL=5*60*1000;
 
 // ── STATE — all top-level variables declared here ────────────────────
@@ -3274,6 +3267,12 @@ async function checkPin(){
   } catch(err) {
     errEl.textContent = 'Connection error. Please try again.';
   }
+  if (data.ok) {
+  pinFailCount = 0;
+  errEl.textContent = '';
+  SESSION_TOKEN = data.token;  // ← add this line
+  activatePartner(data.pid);
+}
 }
 
 function activatePartner(pid){
